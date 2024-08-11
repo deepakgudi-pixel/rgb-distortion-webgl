@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: Regular;
+  src: url('../../public/Catchye.otf');
+}
+
+
+body{
+  font-family: Regular;
+  background-color:  #f0ebe3;
+}
