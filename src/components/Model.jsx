@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import useMouse from './useMouse';
-import { animate, progress, useMotionValue, useTransform } from 'framer-motion';
+import { animate, useMotionValue, useTransform } from 'framer-motion';
 import { useTexture, useAspect } from '@react-three/drei';
 import { motion } from 'framer-motion-3d';
 import useDimension from './useDimension';
@@ -34,28 +34,25 @@ export default function Model({ activeProject }) {
     };
   });
 
-  // Transform the mouse X position to a 3D position in the scene
   const x = useTransform(smoothMouse.x, [0, dimension.width], [-viewport.width / 2, viewport.width / 2]);
   const y = useTransform(smoothMouse.y, [0, dimension.height], [viewport.height / 2, -viewport.height / 2]);
 
-  // Load textures for each project at the top level
   const textures = projects.map(project => useTexture(project.src));
 
   const uniforms = useRef({
     uTexture: { value: textures[0] },
     uDelta: { value: { x: 0, y: 0 } },
     uOpacity: { value: 1 },
-  });
+  }).current;
 
   const mesh = useRef();
 
   const scale = useAspect(
-    textures[0].image.width,
-    textures[0].image.height,
+    textures[0]?.image.width || 1,
+    textures[0]?.image.height || 1,
     0.175
   );
 
-  // Change the texture images on hover
   useEffect(() => {
     if (activeProject != null) {
       animate(opacity, 1, {
@@ -79,7 +76,7 @@ export default function Model({ activeProject }) {
         wireframe={false}
         vertexShader={vertex}
         fragmentShader={fragment}
-        uniforms={uniforms.current}
+        uniforms={uniforms}
       />
     </motion.mesh>
   );
