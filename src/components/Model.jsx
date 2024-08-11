@@ -38,10 +38,9 @@ export default function Model({ activeProject }) {
   const x = useTransform(smoothMouse.x, [0, dimension.width], [-viewport.width / 2, viewport.width / 2]);
   const y = useTransform(smoothMouse.y, [0, dimension.height], [viewport.height / 2, -viewport.height / 2]);
 
-  // Load textures for each project
+  // Load textures for each project at the top level
   const textures = projects.map(project => useTexture(project.src));
 
-  // Set up uniforms for the shader material
   const uniforms = useRef({
     uTexture: { value: textures[0] },
     uDelta: { value: { x: 0, y: 0 } },
